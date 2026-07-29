@@ -55,7 +55,7 @@ install_system() {
   fi
 
   local target_disk=""
-  read -r -p "$(__ "目标磁盘（默认: ${DISK_DEFAULT}）: " "Target disk (default: ${DISK_DEFAULT}): ")" input_disk
+  read -r -p "$(__ "目标磁盘（默认: ${DISK_DEFAULT}）: " "Target disk (default: ${DISK_DEFAULT}): ")" input_disk || true
   target_disk="${input_disk:-$DISK_DEFAULT}"
   echo "$(__ "目标磁盘: " "Target disk: ")$target_disk"
 
@@ -110,7 +110,7 @@ install_system() {
 
   info "$(__ "选择内核 ..." "Selecting kernel ...")"
   local kernel_pkg=""
-  read -r -p "$(__ "内核 (linux/linux-zen/linux-lts，默认 linux): " "Kernel (linux/linux-zen/linux-lts, default linux): ")" input_kernel
+  read -r -p "$(__ "内核 (linux/linux-zen/linux-lts，默认 linux): " "Kernel (linux/linux-zen/linux-lts, default linux): ")" input_kernel || true
   input_kernel="${input_kernel:-linux}"
   case "$input_kernel" in
     linux|linux-zen|linux-lts) kernel_pkg="$input_kernel" ;;
@@ -133,6 +133,7 @@ install_system() {
   cat > /mnt/root-setup.sh <<CHROOT_SCRIPT
 #!/usr/bin/env bash
 set -euo pipefail
+exec < /dev/tty
 
 TIMEZONE="Asia/Shanghai"
 LOCALES=("en_US.UTF-8 UTF-8" "zh_CN.UTF-8 UTF-8")
@@ -158,7 +159,7 @@ fi
 echo "\$HOSTNAME" > /etc/hostname
 
 echo "${C_PASSWD}"
-passwd root
+passwd root || true
 
 if [ -d /sys/firmware/efi ]; then
   grub-install --target=x86_64-efi --efi-directory=/efi --bootloader-id=GRUB || true
@@ -351,7 +352,7 @@ check_network() {
 }
 
 show_menu() {
-  clear 2>/dev/null || true
+  tput reset 2>/dev/null || true
   echo "=============================================="
   echo "      $(__ "Arch Linux 安装与初始化集成脚本" "Arch Linux Installation & Initialization Script")"
   echo "=============================================="
@@ -372,7 +373,7 @@ show_menu() {
 main() {
   while true; do
     show_menu
-    read -rp "$(__ "请输入选项 [0-5]: " "Enter option [0-5]: ")" choice
+    read -rp "$(__ "请输入选项 [0-5]: " "Enter option [0-5]: ")" choice || true
     case $choice in
       1)
         install_system || true
@@ -398,7 +399,7 @@ main() {
         ;;
     esac
     echo
-    read -rp "$(__ "按回车键返回主菜单..." "Press Enter to return to main menu...")"
+    read -rp "$(__ "按回车键返回主菜单..." "Press Enter to return to main menu...")" || true
   done
 }
 

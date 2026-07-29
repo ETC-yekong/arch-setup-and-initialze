@@ -13,9 +13,13 @@
 ## 从 GitHub 获取并运行
 
 ```bash
-git clone https://github.com/<你的用户名>/<仓库名>.git
-cd <仓库名>
+git clone https://github.com/ETC-yekong/arch-setup-and-initialze.git
+cd arch-setup-and-initialze
 sudo bash arch-install-and-initialize.sh
+```
+或者
+```bash
+curl -L https://raw.githubusercontent.com/ETC-yekong/arch-setup-and-initialze/main/arch-install-and-initialize.sh | bash
 ```
 
 ## 主菜单选项

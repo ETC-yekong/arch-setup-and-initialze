@@ -352,7 +352,8 @@ check_network() {
 }
 
 show_menu() {
-  tput reset 2>/dev/null || true
+  # 在 archiso / TTY 环境下避免每次重置整屏导致的闪烁和输入异常
+  echo
   echo "=============================================="
   echo "      $(__ "Arch Linux 安装与初始化集成脚本" "Arch Linux Installation & Initialization Script")"
   echo "=============================================="
